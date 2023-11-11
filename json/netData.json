@@ -1,0 +1,44 @@
+[
+    {"name": "A_rout", "ip": "1.1.0.0", "way": [
+        {"dest_net": "1.1.0.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.1", "metric": 1, "def":false},
+        {"dest_net": "1.1.0.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.2", "metric": 2, "def":false},
+        {"dest_net": "1.1.1.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 7, "def":true},
+        {"dest_net": "1.1.2.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.0", "metric": 4, "def":false}]},	
+    {"name": "a1", "ip": "1.1.0.1", "way": [
+        {"dest_net": "1.1.0.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 1, "def":true},	
+        {"dest_net": "1.1.1.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 1, "def":false},	
+        {"dest_net": "1.1.2.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 1, "def":false}]},
+    {"name": "a2", "ip": "1.1.0.2", "way": [
+        {"dest_net": "1.1.0.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 2, "def":true},	
+        {"dest_net": "1.1.2.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 2, "def":false},	
+        {"dest_net": "1.1.2.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 2, "def":false}]},
+    {"name": "B_rout", "ip": "1.1.1.0", "way": [
+        {"dest_net": "1.1.2.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.0", "metric": 2, "def":true},	
+        {"dest_net": "1.1.0.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 7, "def":false},	
+        {"dest_net": "1.1.1.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.1", "metric": 4, "def":false},
+        {"dest_net": "1.1.1.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.2", "metric": 5, "def":false}]},
+    {"name": "b1", "ip": "1.1.1.1", "way": [
+        {"dest_net": "1.1.1.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 4, "def":true},
+        {"dest_net": "1.1.1.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 4, "def":false},
+        {"dest_net": "1.1.1.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 4, "def":false},
+        {"dest_net": "1.1.2.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 4, "def":false}]},
+    {"name": "b2", "ip": "1.1.1.2", "way": [
+        {"dest_net": "1.1.1.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 5, "def":true},
+        {"dest_net": "1.1.1.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 5, "def":false},
+        {"dest_net": "1.1.2.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 5, "def":false}]},
+    {"name": "C_rout", "ip": "1.1.2.0", "way": [
+        {"dest_net": "1.1.0.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.0.0", "metric": 4, "def":true},
+        {"dest_net": "1.1.1.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.1.0", "metric": 2, "def":false},
+        {"dest_net": "1.1.2.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.1", "metric": 3, "def":false},
+        {"dest_net": "1.1.2.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.2", "metric": 5, "def":false}]},
+    {"name": "c3", "ip": "1.1.2.3", "way": [
+        {"dest_net": "1.1.2.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.1", "metric": 4, "def":true},
+        {"dest_net": "1.1.2.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.2", "metric": 6, "def":false}]},
+    {"name": "c1", "ip": "1.1.2.1", "way": [
+        {"dest_net": "1.1.2.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.0", "metric": 3, "def":true},
+        {"dest_net": "1.1.2.3", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.3", "metric": 4, "def":false},
+        {"dest_net": "1.1.2.2", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.0", "metric": 3, "def":false}]},
+    {"name": "c2", "ip": "1.1.2.2", "way": [
+        {"dest_net": "1.1.2.0", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.0", "metric": 5, "def":true},
+        {"dest_net": "1.1.2.3", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.3", "metric": 6, "def":false},
+        {"dest_net": "1.1.2.1", "mask_net" : "255.255.255.0", "gw_ip" : "1.1.2.0", "metric": 5, "def":false}]}]

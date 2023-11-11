@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html style="height: 100%;">
+  <head>
+    <link href="./css/vuetify.min.css" rel="stylesheet">
+  </head>
+  <body style="height: 100%;">
+    <div id="app" class="h-100">
+      <div class="position-fixed border-solid w-100 h-100">
+        <svg id="svgd3" style="width: 100%; height: 100%;"></svg>
+      </div>
+      <v-switch class="position-fixed ma-3"  color="red"
+      hide-details label="Меню" v-model="drawer"></v-switch>
+      <Transition name="slide-fade">
+        <v-card id="menuField" v-show="drawer" variant="outlined" class="position-fixed w-25 ma-5 mt-15 text-h6"> 
+          <v-card-item>
+            <v-row class="text-overline ma-1"> 
+              Сетевая карта
+            </v-row>
+            <v-row class="w-100" style="margin-left: -38px;">
+              <v-file-input show-size color="green"
+              clearable label="File input" density="compact" variant="outlined" onchange='readText(this)'></v-file-input>
+            </v-row>
+            <v-row>
+              <v-col cols="5">
+                Добавить узел
+              </v-col>
+              <v-col>
+                Удалить узел
+              </v-col>
+            </v-row>
+            <v-card-actions>
+              <v-row>
+                <v-col cols="5">
+                  <v-btn @click="dialogAdd = !dialogAdd" variant="outlined">
+                    +
+                  </v-btn>
+                </v-col>
+                <v-col cols="4">
+                  <v-select density="compact" :items="nodeName" label="Выберете узел*" v-model="nodeToDel"/>
+                </v-col>
+                <v-col cols="3">
+                  <v-btn @click="deleteNode(nodeToDel)" variant="outlined">
+                    -
+                  </v-btn>
+                </v-col>
+              </v-row>
+              
+              <v-dialog
+                v-model="dialogAdd"
+                persistent
+                width="1024"
+              >
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">Добавить узел</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col>
+                          <v-text-field v-model="node.name" label="Name" required></v-text-field>
+                        </v-col>
+                        <v-col>
+                          <v-text-field v-model="node.ip" label="Ip" required></v-text-field>
+                        </v-col>
+                        <v-col>
+                      </v-row>
+                      <v-row class="mb-8">
+                        <v-divider class="border-opacity-100"></v-divider>
+                      </v-row>
+                      <v-form v-for="(item, n) of node.way" :key="n">
+                        <v-row>
+                          <v-col >
+                            <v-text-field v-model="item.dest_net" label="Адрес" required></v-text-field>
+                          </v-col>
+                          <v-col >
+                            <v-text-field v-model="item.mask_net" label="Маска" required></v-text-field>
+                          </v-col>
+                          <v-col >
+                            <v-text-field v-model="item.gw_ip" label="Шлюз" required></v-text-field>
+                          </v-col>
+                          <v-col >
+                            <v-text-field v-model.number="item.metric" type="number" label="Стоимость" required></v-text-field>
+                          </v-col>
+                          <v-col>
+                            <v-btn variant="outlined" @click="deleteField(n)"> Удалить </v-btn>
+                          </v-col>
+                        </v-row>
+                        <v-row class="mb-5">
+                          <v-divider class="border-opacity-100"></v-divider>
+                        </v-row>
+                      </v-form>
+                      <v-row>
+                        <v-col>
+                          <v-btn variant="outlined" @click="createWayField"> Добавить маршрут </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="blue-darken-1"
+                      variant="text"
+                      @click="closeForm"
+                    >
+                      Close
+                    </v-btn>
+                    <v-btn
+                      color="blue-darken-1"
+                      variant="text"
+                      @click="saveNode"
+                    >
+                      Save
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-card-actions>
+            <v-row class="ma-1">
+              Найти путь
+            </v-row>
+            <v-row class=" ma-1" > 
+              <v-text-field density="compact" v-model="search.pointA" clearable 
+              label="A:" variant="underlined" 
+              :rules="[() => !!search.pointA || 'This field is required']" 
+              />
+            </v-row>
+            <v-row class="ma-1" > 
+              <v-text-field density="compact" v-model="search.pointB" clearable 
+              label="B:" variant="underlined" 
+              :rules="[() => !!search.pointB || 'This field is required']" 
+              />
+            </v-row>
+            <v-card-actions>
+              <v-btn variant="outlined" @click="searchWay">
+                Поиск
+              </v-btn>
+              <v-btn variant="outlined" @click="createGraph(data)">
+                Вернуть граф
+              </v-btn>
+            </v-card-actions>
+            <v-row class=" ma-1">
+              Сохранить файл
+            </v-row>
+            <v-card-actions>
+              <v-btn variant="outlined" @click="saveGraph">
+                Сохранить
+              </v-btn>
+            </v-card-actions>
+          </v-card-item>
+        </v-card>
+      </Transition>
+    </div>
+    
+    <script src="./js/d3.v4.min.js"></script>
+    <script src="./js/vue@next"></script>
+    <script src="./js/vuetify.min.js"></script>
+    <script src="./js/graph.js"></script>
+    <script src="./js/route.js"></script>
+    <script src="./js/fileReader.js"></script>
+
+    <script> 
+      const { createVuetify } = Vuetify
+      const { createApp } = Vue
+      const vuetify = createVuetify()
+
+      const app = createApp({
+        data: () => ({
+          drawer: true,
+          dialogAdd: false,
+          nodeName: [],
+          nodeToDel: "",
+          node: {
+            name: "",
+            ip: "",
+            way: []
+          },
+          search: {
+            pointA: "",
+            pointB: ""
+          },
+          data: [],
+          graph: null,
+        }),
+        methods: {
+          createWayField() {
+            this.node.way.push({
+              dest_net: "",
+              mask_net: "255.255.255.0",
+              gw_ip: "",
+              metric: 1,
+              def: false
+            })
+          },
+          deleteField(n) {
+            this.node.way.splice(n, 1)
+          },
+          closeForm() {
+            this.dialogAdd = false
+            this.node = {
+              name: "",
+              ip: "",
+              way: []
+            }
+          },
+          saveNode() {
+            addOrChange(this.node, this.data)
+            // this.data.push(this.node)
+            this.launchGraph(this.data)
+            this.closeForm()
+          },
+          deleteNode(ipNode) {
+            this.launchGraph(deleteNode(ipNode, this.data))
+            this.nodeToDel = ""
+          },
+          launchGraph(jsonData) {
+            this.data = jsonData
+            this.nodeName = this.createNamesNode()
+            this.createGraph(jsonData)
+          },
+          createGraph(data) {
+            if(this.graph) {
+              this.graph.clearGraph()
+            }
+            this.graph = new Graph(data);
+          },
+          saveGraph() {
+            saveData(this.data)
+          },
+          updateGraph(){
+            this.graph.updateSimulation()
+          },
+          searchWay() {
+            this.createGraph(dfs(this.search.pointA, this.search.pointB, this.data))
+          },
+          createNamesNode() {
+            let names = []
+            for(let it of this.data) { 
+              names.push(it.ip)
+            }
+            return names
+          }
+        },
+        computed:{
+          getDataGraph() {
+            return
+          },
+          // getNamesNode() {
+            // return this.nodeName
+          // }
+        },
+        created() {
+          // this.launchGraph()
+        }
+          // this.updateGraph()
+      })
+
+      const vc = app.use(vuetify).mount('#app')
+
+      document.addEventListener("GraphLoad", function(e) {
+          let jsonData = JSON.parse(e.detail);
+          vc.launchGraph(jsonData);
+      })
+      document.addEventListener("GetNode", function(e) {
+        vc.node = getElement(e.detail, vc.data) 
+        vc.dialogAdd = true
+      })
+    
+      // const graph = new Graph(dataNet)
+      // graph.updateSimulation()
+      
+    </script>
+
+    <!-- <script>
+      if (window.matchMedia('(min-width: 760px)').matches) {
+        document.getElementById("menuField").classList.remove("text-h6")
+        document.getElementById("menuField").classList.remove("text-h7")
+        console.log("bbb");
+      } else {
+        console.log("aaa");
+        document.getElementById("menuField").classList.toggle("text-h6")
+      }
+    </script> -->
+</body>
+  
+</html>
+<style type="text/css">
+.slide-fade-enter-active {
+transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+transition: all 0.8s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+transform: translateX(-20px);
+opacity: 0;
+}
+</style>
